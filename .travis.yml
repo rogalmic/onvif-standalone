@@ -1,0 +1,30 @@
+language: node_js
+
+node_js:
+- '9.9.0'
+
+os:
+- linux
+dist: trusty
+
+branches:
+  only:
+  - master
+
+install:
+- npm install -g electron-builder
+- npm install
+- sudo apt install wine
+
+script:
+- npm run-script build
+
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: "dist/*.exe"
+    skip_cleanup: true
+    on:
+      branch: master
+            

@@ -1,0 +1,7 @@
+appId: org.rogalmic.onvif-standalone
+copyright: "Copyright © 2018 Michal Rogalinski"
+productName: Onvifier
+compression: maximum
+npmRebuild: true
+nodeGypRebuild: false
+asar: false
