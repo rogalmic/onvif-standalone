@@ -1,13 +1,27 @@
 const electron = require('electron')
 const onvif = require('node-onvif')
 
-// Module to control application life.
 const app = electron.app
-// Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+const ipcMain = electron.ipcMain
 
 const path = require('path')
 const url = require('url')
+
+ipcMain.on('async', (event, arg) => {  
+  console.log(arg);
+  event.sender.send('async-reply', 2);
+});
+
+ipcMain.on('sync', (event, arg) => {  
+  console.log(arg);
+  event.returnValue = 4;
+  mainWindow.webContents.send('ping', 5);
+});
+
+exports.pong = arg => {  
+  console.log(arg);
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -48,7 +62,7 @@ function createWindow () {
     console.log(res)
 	}).catch((error) => {
     let res = {'id': 'connect', 'error': error.message};
-    console.log(res)
+    mainWindow.webContents.send('onvif_loaded', 5);
   });
   
   // Open the DevTools.
