@@ -8,6 +8,8 @@ const ipcMain = electron.ipcMain
 const path = require('path')
 const url = require('url')
 
+var devices = {};
+
 ipcMain.on('async', (event, arg) => {  
   console.log(arg);
   event.sender.send('async-reply', 2);
@@ -60,9 +62,12 @@ function createWindow () {
 		}
     let res = {'id': 'startDiscovery', 'result': devs};
     console.log(res)
+    mainWindow.webContents.send('onvif_loaded', devices);
 	}).catch((error) => {
     let res = {'id': 'connect', 'error': error.message};
-    mainWindow.webContents.send('onvif_loaded', 5);
+    console.log(res)
+    var devs = {};
+    mainWindow.webContents.send('onvif_loaded', devs);
   });
   
   // Open the DevTools.

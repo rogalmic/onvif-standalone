@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Onvifier Camera Manager (standalone)</title>
+	<title>ONVIF Camera Manager</title>
 	<link href="style.css" rel="stylesheet">
 </head>
 <body>
 
 <div id="container">	
 	<div class="fade-animated" id="connect-form">	
-		<select class="form-control" id="device" name="device">
+		<select class="form-control" id="device_selection" name="device">
 			<option>searching for onvif devices...</option>
 		</select>	
 		<label for="user">Username</label>
@@ -19,34 +19,29 @@
 		<button type="button" id="connect" name="connect">Connect</button>
 	</div>
 
-	<!-- <div class="fade-animated" id="connected-device">
-		<p><img class="snapshot" src=""></p>
-		<div class="device-info-box"><span class="name"></span> (<span class="address"></span>)</div>
-		<div class="ptz-ctl-box">
-			<div class="ptz-pad-box">
-				<button type="button" class="ptz-goto-home"><span class="glyphicon glyphicon-home"></span></button>
-				<span class="left glyphicon glyphicon-menu-left"></span>
-				<span class="right glyphicon glyphicon-menu-right"></span>
-				<span class="up glyphicon glyphicon-menu-up"></span>
-				<span class="down glyphicon glyphicon-menu-down"></span>
-			</div>
+	<div class="fade-animated" id="connected-device">
+		<img id="snapshot" />
+		<div id="device-info-box"><span id="device-name"></span> (<span id="device-address"></span>&#10006;)</div>
+		<div id="ptz-direction-control">
+				<div id="ptz-left">&larr;</div>
+				<div id="ptz-right">&rarr;</div>
+				<div id="ptz-up">&uarr;</div>
+				<div id="ptz-down">&darr;</div>
 		</div>
-		<div class="ptz-spd-ctl-box">
-			<span class="label">PTZ speed for keyboard</span>
+		<div id="ptz-speed-control">
+			<!-- <span class="label">PTZ speed for keyboard</span>
 			<div class="btn-group btn-group-sm" data-toggle="buttons">
 				<label class="btn btn-default"><input type="radio" name="ptz-speed" value="0.5"> slow</label>
 				<label class="btn btn-default"><input type="radio" name="ptz-speed" value="0.75"> medium</label>
 				<label class="btn btn-default active"><input type="radio" name="ptz-speed" value="1.0" checked> fast</label>
-			</div>
+			</div> -->
 		</div>
-		<div class="ptz-zom-ctl-box btn-group btn-group-lg" role="group" aria-label="Zoom">
-			<button type="button" class="ptz-zom ptz-zom-ot btn btn-default"><span class="glyphicon glyphicon-zoom-out"></span></button>
-			<button type="button" class="ptz-zom ptz-zom-in btn btn-default"><span class="glyphicon glyphicon-zoom-in"></span></button>
+		<div id="zoom-control">
+			<div id="ptz-zoom-in">+</div>
+			<div>&#x1F50E;</div>
+			<div id="ptz-zoom-out">-</div>
 		</div>
-		<div class="disconnect-box">
-			<button type="button" class="form-control btn btn-default" name="disconnect">Disconnect</button>
-		</div>
-	</div> -->
+	</div>
 </div>
 
 <!-- <div role="dialog" class="fade-animated" id="message-modal">
