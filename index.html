@@ -21,48 +21,31 @@
 
 	<div class="fade-animated" id="connected-device">
 		<img id="snapshot" />
-		<div id="device-info-box"><span id="device-name"></span> (<span id="device-address"></span>&#10006;)</div>
+		<div id="device-info-box"><a href=".">&#10006;</a> <span id="device-name"></span> (<span id="device-address"></span>)</div>
 		<div id="ptz-direction-control">
-				<div id="ptz-left">&larr;</div>
-				<div id="ptz-right">&rarr;</div>
-				<div id="ptz-up">&uarr;</div>
-				<div id="ptz-down">&darr;</div>
-		</div>
-		<div id="ptz-speed-control">
-			<!-- <span class="label">PTZ speed for keyboard</span>
-			<div class="btn-group btn-group-sm" data-toggle="buttons">
-				<label class="btn btn-default"><input type="radio" name="ptz-speed" value="0.5"> slow</label>
-				<label class="btn btn-default"><input type="radio" name="ptz-speed" value="0.75"> medium</label>
-				<label class="btn btn-default active"><input type="radio" name="ptz-speed" value="1.0" checked> fast</label>
-			</div> -->
+			<div class="clickable-pointer" id="ptz-left">&larr;</div>
+			<div class="clickable-pointer" id="ptz-right">&rarr;</div>
+			<div class="clickable-pointer" id="ptz-up">&uarr;</div>
+			<div class="clickable-pointer" id="ptz-down">&darr;</div>
 		</div>
 		<div id="zoom-control">
-			<div id="ptz-zoom-in">+</div>
-			<div>&#x1F50E;</div>
-			<div id="ptz-zoom-out">-</div>
+			<div class="clickable-pointer" id="extra-command">&#x2623;</div>
+			<div class="clickable-pointer" id="ptz-zoom-in">+</div>			
+			<div class="clickable-pointer" id="ptz-zoom-out">-</div>
 		</div>
 	</div>
 </div>
 
-<!-- <div role="dialog" class="fade-animated" id="message-modal">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title"></h4>
-			</div>
-			<div class="modal-body">
-				<p class="modal-message"></p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div> -->
+<div role="dialog" class="fade-animated" id="dialog">
+	<textarea id="code-to-execute">$('img#snapshot').css('filter', 'grayscale(100%)');</textarea>
+	<button type="button" id="execute-code">Execute (main)</button>
+	<button type="button" id="execute-ui-code">Execute (ui)</button>
+	<button type="button" id="close-dialog" >Close</button>
+</div>
 
 <script>
   require('./renderer.js')
 </script>
+
 </body>
 </html>

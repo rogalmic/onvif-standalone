@@ -1,42 +1,83 @@
 window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
 
-var {ipcRenderer, remote} = require('electron'); 
+var { ipcRenderer, remote, session } = require('electron');
 
 var main = remote.require("./main.js");
+var timerId = -1;
 
-// Send async message to main process
-ipcRenderer.send('async', 1);
+$(document).ready(function () {
 
-// Listen for async-reply message from main process
-ipcRenderer.on('async-reply', (event, arg) => {  
-    // Print 2
-    console.log(arg);
-    // Send sync message to main process
-    let mainValue = ipcRenderer.sendSync('sync', 3);
-    // Print 4
-    console.log(mainValue);
-});
+    // User interface handlers
 
-// Listen for main message
-ipcRenderer.on('ping', (event, arg) => {  
-    // Print 5
-    console.log(arg);
-    // Invoke method directly on main process
-    main.pong(6);
-});
+    $('div#device-info-box a').click(function () {
+        ipcRenderer.send('device_disconnect');
+        return false;
+    });
 
-$(document).ready(function() {
+    $('#ptz-left').click(function () {
+        ipcRenderer.send('device_execute', 'left');
+        return false;
+    });
 
-    $('#ptz-left').click(function() {alert('aaa');});
+    $('#ptz-right').click(function () {
+        ipcRenderer.send('device_execute', 'right');
+        return false;
+    });
 
-    $('div.fade-animated').css('opacity', '0.0');        
-    $('div.fade-animated').css('transition', 'opacity 0.8s');
-    $('div.fade-animated').css('display', 'none');
+    $('#ptz-up').click(function () {
+        ipcRenderer.send('device_execute', 'up');
+        return false;
+    });
 
-    ipcRenderer.on('onvif_loaded', (event, arg) => {        
-        $('select#device_selection').empty();  
+    $('#ptz-down').click(function () {
+        ipcRenderer.send('device_execute', 'down');
+        return false;
+    });
 
-        for(var key in arg) {
+    $('#ptz-zoom-in').click(function () {
+        ipcRenderer.send('device_execute', 'ptz-zoom-in');
+        return false;
+    });
+
+    $('#ptz-zoom-out').click(function () {
+        ipcRenderer.send('device_execute', 'ptz-zoom-out');
+        return false;
+    });
+
+    $('#extra-command').click(function () {
+        $('div#dialog').css('display', 'block');
+        $('div#dialog').css('opacity', '1.0');
+    }); 
+
+    $('#connect-form button#connect').click(function () {
+        $('div#connect-form').css('opacity', '0.0');
+        $('div#connect-form').css('display', 'none');
+
+        var obj = { user: $('input#user').val(), pass: $('input#pass').val() }
+        ipcRenderer.send('device_connect', obj);
+    });
+
+    $('button#execute-code').click(function () {
+        var code = $('textarea#code-to-execute').val();
+        ipcRenderer.send('device_execute', code);
+    });
+
+    $('button#execute-ui-code').click(function () {
+        var code = $('textarea#code-to-execute').val();
+        jQuery.globalEval(code);
+    });
+    
+    $('button#close-dialog').click(function () {
+        $('div#dialog').css('opacity', '0.0');
+        $('div#dialog').css('display', 'none');
+    });    
+
+    // Backend callback handlers
+
+    ipcRenderer.on('device_discovered', (event, arg) => {
+        $('select#device_selection').empty();
+
+        for (var key in arg) {
             var device = devices[key];
             var option_el = $('<option></option>');
             option_el.val(device.address);
@@ -45,20 +86,63 @@ $(document).ready(function() {
         }
 
         $('div#connect-form').css('opacity', '1.0');
-        $('div#connect-form > *').prop('disabled', false);
+        ipcRenderer.send('cookies_acquire');
     });
 
-    $('#connect-form button#connect').click(function() {
-        $('div#connect-form').css('opacity', '0.0');
-        $('div#connect-form').css('display', 'none');
+    ipcRenderer.on('snapshot_updated', (event, arg) => {
+        $('img#snapshot').attr('src', arg);
+    });
 
-        $('img#snapshot').attr('src', 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjQsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkNhcGFfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTYgMTYiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZD0iTTgsMEMzLjU4MiwwLDAsMy41ODIsMCw4czMuNTgyLDgsOCw4czgtMy41ODIsOC04UzEyLjQxOCwwLDgsMHogTTksMTJjMCwwLjU1Mi0wLjQ0OCwxLTEsMXMtMS0wLjQ0OC0xLTFWNw0KCWMwLTAuNTUyLDAuNDQ4LTEsMS0xczEsMC40NDgsMSwxVjEyeiBNOCw1LjAxNmMtMC41NTIsMC0xLTAuNDQ4LTEtMWMwLTAuNTUyLDAuNDQ4LTEsMS0xczEsMC40NDgsMSwxQzksNC41NjgsOC41NTIsNS4wMTYsOCw1LjAxNnoNCgkiLz4NCjwvc3ZnPg==');
+    ipcRenderer.on('device_connected', (event, arg) => {
+
+        $('div#device-info-box span#device-name').html("Foscam C1 lite");
+        $('div#device-info-box span#device-address').html("192.168.1.91");
+
+        ipcRenderer.send('snapshot_update');
+
+        if (timerId >= 0) {
+            clearInterval(timerId);
+            timerId = -1;
+        }
+
+        timerId = setInterval(function () {
+            ipcRenderer.send('snapshot_update');
+        }, 5000)
 
         $('div#connected-device').css('display', 'block');
-        $('div#connected-device').css('opacity', '1.0');        
+        $('div#connected-device').css('opacity', '1.0');
+        $('img#snapshot').css('opacity', '1.0');
     });
+
+    ipcRenderer.on('cookies_acquired', (event, arg) => {
+        $('div#connect-form > *').prop('disabled', false);
+        var userCookie = arg.find(function (cookie) { return cookie.name == 'user'; })
+        var passCookie = arg.find(function (cookie) { return cookie.name == 'pass'; })
+
+        if (userCookie != undefined && passCookie != undefined) {
+            $('input#user').val(userCookie.value);
+            $('input#pass').val(passCookie.value);
+        }
+    });
+
+    ipcRenderer.on('device_executed', (event, arg) => {
+        if (arg) {
+            alert(arg);
+        }
+    });
+
+    // Initial tasks
+
+    $('div.fade-animated').css('opacity', '0.0');
+    $('div.fade-animated').css('transition', 'opacity 0.8s');
+    $('div.fade-animated').css('display', 'none');
+
+    $('img#snapshot').css('opacity', '0.0')
+    $('img#snapshot').css('transition', 'opacity 0.8s');
 
     $('div#connect-form > *').prop('disabled', true);
     $('div#connect-form').css('display', 'block');
     $('div#connect-form').css('opacity', '0.5');
+
+    ipcRenderer.send('device_discover');
 });

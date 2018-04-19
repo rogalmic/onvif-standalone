@@ -1,5 +1,6 @@
 * {font-size:20px; font-family:Tahoma,sans-serif; margin:0; padding:0; border:0;}
 *:focus { outline: none; }
+*.clickable-pointer { cursor: pointer; }
 
 body {background: radial-gradient(circle at 100%, #eee, #fff 50%, #eee 75%, #fff 75%); }
 select,input,textarea,button { font-family:Tahoma,sans-serif; padding: 4px 0px; margin: 2px 0px; width: calc(100% - 0px); }
@@ -17,21 +18,20 @@ div#container { position: relative; margin: 5% auto; max-width: 800px;}
 div#message-modal { position: fixed; margin: 20% 20%;  visibility: hidden; }
 
 div#container > div#connected-device { position: relative; }
-div#container > div#connected-device > img#snapshot { height: 400px; display:block; width: 100%; }
-div#container > div#connected-device > div { position: absolute; opacity: 0.5; background: #fff; overflow: hidden; }
-
-div#container > div#connected-device > div#device-info-box { left:50%; top:0; width: 360px; height:30px; line-height: 30px; margin-left: -180px; border-radius: 5px; }
-div#container > div#connected-device > div#ptz-direction-control { left:0; bottom:0; width: 100px; height:100px; border-radius: 50px; }
-div#container > div#connected-device > div#ptz-direction-control > * { position: absolute; font-size:30px; font-weight: 900; cursor: pointer; }
-div#container > div#connected-device > div#ptz-direction-control > #ptz-left {left: 0 ; top: 32%;}
-div#container > div#connected-device > div#ptz-direction-control > #ptz-right {right: 0 ; top: 32%;}
-div#container > div#connected-device > div#ptz-direction-control > #ptz-up {left: 42% ; top: 0;}
-div#container > div#connected-device > div#ptz-direction-control > #ptz-down {left: 42% ; bottom: 0;}
-
-div#container > div#connected-device > div#ptz-speed-control { right:0; bottom:0; width: 50px; height:30px; border-radius: 5px;  }
-div#container > div#connected-device > div#zoom-control { right:0; top:0; width: 40px; height:80px; border-radius: 5px; }
-div#container > div#connected-device > div#zoom-control > div { width:100%; cursor: pointer; text-align: center; }
+div#container > div#connected-device > img#snapshot { height: 400px; display:block; width: 100%; border-radius: 10px; background-color: rgba(100, 100, 100, 0.25) }
+div#container > div#connected-device > div { position: absolute; opacity: 0.35; background: #fff; overflow: hidden; }
+div#container > div#connected-device > div#device-info-box { left:50%; top:6px; width: 360px; height:30px; line-height: 30px; margin-left: -180px; border-radius: 5px; text-align:center; overflow: hidden; }
+div#container > div#connected-device > div#ptz-direction-control { left:6px; bottom:6px; width: 100px; height:100px; border-radius: 50px; overflow: hidden; }
+div#container > div#connected-device > div#ptz-direction-control > * { position: absolute; font-size:30px; font-weight: 900; }
+div#container > div#connected-device > div#ptz-direction-control > #ptz-left {left: 2px ; top: 30px;}
+div#container > div#connected-device > div#ptz-direction-control > #ptz-right {right: 2px ; top: 30px;}
+div#container > div#connected-device > div#ptz-direction-control > #ptz-up {left: 42px ; top: -5px;}
+div#container > div#connected-device > div#ptz-direction-control > #ptz-down {left: 42px ; bottom: 5px;}
+div#container > div#connected-device > div#zoom-control { right:6px; top:6px; width: 40px; height:80px; border-radius: 5px; overflow: hidden; }
+div#container > div#connected-device > div#zoom-control > div { width:100%; text-align: center; }
 
 div#container > div#connect-form { position: relative; margin: 10% auto; max-width: 500px; }
 div#container > div#connect-form > * { display: block; }
 
+div#dialog { position: fixed; top:50%; left:50%; margin-top: -200px; margin-left:-300px; height: 400px; width: 600px; background: white; border: 1px dashed gray; padding: 50px 40px;}
+div#dialog > textarea {height: 240px; width: 100%; font-family: Courier, monospace; text-align: left; font-size:14px; resize: none;}
