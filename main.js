@@ -12,6 +12,7 @@ const url = require('url')
 
 const cookieUrl = 'https://github.com/rogalmic/onvif-standalone';
 var devices = {};
+var connectedDevice = 'aaa';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -31,7 +32,7 @@ function createWindow() {
   }))
 
   // Open the DevTools.
-   mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -131,18 +132,29 @@ ipcMain.on('snapshot_update', (event, arg) => {
 ipcMain.on('device_connect', (event, arg) => {
   console.log('device_connect(' + JSON.stringify(arg).replace(arg.pass, '*') + ')');
 
-  var cookie = { url: cookieUrl, name: 'user', value: arg.user, expirationDate: Date.now() + 365 * 24 * 60 * 60 * 1000 }
-  var cookie2 = { url: cookieUrl, name: 'pass', value: arg.pass, expirationDate: Date.now() + 365 * 24 * 60 * 60 * 1000 }
+  connectedDevice = new onvif.OnvifDevice({ xaddr: arg.url, user : arg.user, pass : arg.pass });
 
-  session.defaultSession.cookies.set(cookie, (error) => {
-    if (error) console.error(error)
-  })
+  connectedDevice.init().then((info) => {
+    console.log(JSON.stringify(info));
 
-  session.defaultSession.cookies.set(cookie2, (error) => {
-    if (error) console.error(error)
-  })
+    var cookie = { url: cookieUrl, name: 'user', value: arg.user, expirationDate: Date.now() + 365 * 24 * 60 * 60 * 1000 }
+    var cookie2 = { url: cookieUrl, name: 'pass', value: arg.pass, expirationDate: Date.now() + 365 * 24 * 60 * 60 * 1000 }
+  
+    session.defaultSession.cookies.set(cookie, (error) => {
+      if (error) console.error(error)
+    })
+  
+    session.defaultSession.cookies.set(cookie2, (error) => {
+      if (error) console.error(error)
+    })
+  
+    event.sender.send('device_connected', info);
 
-  event.sender.send('device_connected', '');
+  }).catch((error) => {
+    console.error(JSON.stringify(error));
+
+    event.sender.send('device_connected', undefined);
+  });
 });
 
 ipcMain.on('device_disconnect', (event, arg) => {
@@ -155,6 +167,6 @@ ipcMain.on('device_execute', (event, arg) => {
   console.log('device_execute(' + JSON.stringify(arg) + ')');
   var result = eval(arg);
 
-  event.sender.send('device_executed', JSON.stringify(result));
+  event.sender.send('device_executed', result);
 });
 

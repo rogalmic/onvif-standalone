@@ -2,7 +2,8 @@
 *:focus { outline: none; }
 *.clickable-pointer { cursor: pointer; }
 
-body {background: radial-gradient(circle at 100%, #eee, #fff 50%, #eee 75%, #fff 75%); }
+html, body { width: 100%; height: 100%; }
+body {background: radial-gradient(circle at 100%, #eee, #fff 50%, #eee 75%, #fff 75%); overflow: hidden;}
 select,input,textarea,button { font-family:Tahoma,sans-serif; padding: 4px 0px; margin: 2px 0px; width: calc(100% - 0px); }
 select,input,textarea,button { border-radius: 6px; }
 select, input { text-indent: 10px; }
@@ -14,24 +15,24 @@ button:hover { color: #fff; }
 a { color:#ff5800; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-div#container { position: relative; margin: 5% auto; max-width: 800px;}
+div#container { position: relative; padding: 5% 5%; width: 90%; height: 80%; }
 div#message-modal { position: fixed; margin: 20% 20%;  visibility: hidden; }
 
-div#container > div#connected-device { position: relative; }
-div#container > div#connected-device > img#snapshot { height: 400px; display:block; width: 100%; border-radius: 10px; background-color: rgba(100, 100, 100, 0.25) }
+div#container > div#connected-device { position: relative; height: 100%; width: 100%;  }
+div#container > div#connected-device > img#snapshot { height: 100%; width: 100%; display:block; border-radius: 10px; background-color: rgba(100, 100, 100, 0.25) }
 div#container > div#connected-device > div { position: absolute; opacity: 0.35; background: #fff; overflow: hidden; }
-div#container > div#connected-device > div#device-info-box { left:50%; top:6px; width: 360px; height:30px; line-height: 30px; margin-left: -180px; border-radius: 5px; text-align:center; overflow: hidden; }
+div#container > div#connected-device > div#device-info-box { left:50%; top:6px; width: 480px; height:30px; line-height: 30px; margin-left: -240px; border-radius: 5px; text-align:center; overflow: hidden; }
 div#container > div#connected-device > div#ptz-direction-control { left:6px; bottom:6px; width: 100px; height:100px; border-radius: 50px; overflow: hidden; }
 div#container > div#connected-device > div#ptz-direction-control > * { position: absolute; font-size:30px; font-weight: 900; }
 div#container > div#connected-device > div#ptz-direction-control > #ptz-left {left: 2px ; top: 30px;}
 div#container > div#connected-device > div#ptz-direction-control > #ptz-right {right: 2px ; top: 30px;}
 div#container > div#connected-device > div#ptz-direction-control > #ptz-up {left: 42px ; top: -5px;}
 div#container > div#connected-device > div#ptz-direction-control > #ptz-down {left: 42px ; bottom: 5px;}
-div#container > div#connected-device > div#zoom-control { right:6px; top:6px; width: 40px; height:80px; border-radius: 5px; overflow: hidden; }
-div#container > div#connected-device > div#zoom-control > div { width:100%; text-align: center; }
+div#container > div#connected-device > div#zoom-control { right:6px; bottom:6px; width: 50px; height:100px; border-radius: 5px; overflow: hidden; }
+div#container > div#connected-device > div#zoom-control > div { width:100%; text-align: center; font-size:26px;}
 
 div#container > div#connect-form { position: relative; margin: 10% auto; max-width: 500px; }
 div#container > div#connect-form > * { display: block; }
 
-div#dialog { position: fixed; top:50%; left:50%; margin-top: -200px; margin-left:-300px; height: 400px; width: 600px; background: white; border: 1px dashed gray; padding: 50px 40px;}
-div#dialog > textarea {height: 240px; width: 100%; font-family: Courier, monospace; text-align: left; font-size:14px; resize: none;}
+div#dialog { position: fixed; top:50%; left:50%; margin-top: -160px; margin-left:-300px; height: 320px; width: 600px; background: white; border: 1px dashed gray; padding: 50px 40px;}
+div#dialog > textarea {height: 200px; width: 100%; font-family: Courier, monospace; text-align: left; font-size:14px; resize: none;}

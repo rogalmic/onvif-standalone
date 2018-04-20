@@ -2,8 +2,9 @@ window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
 
 var { ipcRenderer, remote, session } = require('electron');
 
-var main = remote.require("./main.js");
+var main = remote.require('./main.js');
 var timerId = -1;
+
 
 $(document).ready(function () {
 
@@ -53,13 +54,8 @@ $(document).ready(function () {
         $('div#connect-form').css('opacity', '0.0');
         $('div#connect-form').css('display', 'none');
 
-        var obj = { user: $('input#user').val(), pass: $('input#pass').val() }
+        var obj = { url:'http://dummy.org/', user: $('input#user').val(), pass: $('input#pass').val() }
         ipcRenderer.send('device_connect', obj);
-    });
-
-    $('button#execute-code').click(function () {
-        var code = $('textarea#code-to-execute').val();
-        ipcRenderer.send('device_execute', code);
     });
 
     $('button#execute-ui-code').click(function () {
@@ -123,11 +119,24 @@ $(document).ready(function () {
             $('input#user').val(userCookie.value);
             $('input#pass').val(passCookie.value);
         }
+
+        var codeCookie = arg.find(function (cookie) { return cookie.name == 'initial-code'; });
+        if (codeCookie != undefined) {
+            $('textarea#code-to-execute').val(codeCookie.value);
+        }
+        else {
+            var code = `var { ipcRenderer } = require('electron');\n`
+            +`$('img#snapshot').css('filter', 'blur(4px) sepia(50%)');\n`
+            +`$('img#snapshot').css('transition', 'filter 10s');\n`
+            +`$('img#snapshot').css('object-fit', 'contain');\n`
+            +`ipcRenderer.send('device_execute', 'console.log("aaa")');\n`;
+            $('textarea#code-to-execute').val(code);
+        }        
     });
 
     ipcRenderer.on('device_executed', (event, arg) => {
         if (arg) {
-            alert(arg);
+            console.log(arg);
         }
     });
 
