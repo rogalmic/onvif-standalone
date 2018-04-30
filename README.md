@@ -9,3 +9,8 @@ Based on web sample from [node-onvif](https://github.com/futomi/node-onvif).
 ## License
 
 [MIT](LICENSE.md)
+
+## Plans
+
+- node-rtsp-stream usage
+- extensibility: custom commands in javascript, css3 filters for image, ...
