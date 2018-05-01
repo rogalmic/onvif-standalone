@@ -1,11 +1,26 @@
 language: node_js
 
 node_js:
-- '9.9.0'
+- '10.0.0'
 
 os:
 - linux
+
+sudo: required
 dist: trusty
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ trusty main'
+      key_url: 'https://dl.winehq.org/wine-builds/Release.key'
+    packages:
+    - winehq-staging
+    - build-essential
+    - gcc-multilib
+    - g++-multilib
+    - libstdc++6
 
 branches:
   only:
@@ -14,9 +29,9 @@ branches:
 install:
 - npm install -g electron-builder
 - npm install
-- sudo apt install wine
 
 script:
+- /sbin/ldconfig -p | grep stdc++ ; apt list gcc* ; strings /usr/lib*/libstdc++.so.6 | grep LIBCXX ; strings /usr/lib/*/libstdc++.so.6 | grep LIBCXX
 - npm run-script build
 
 deploy:
@@ -28,3 +43,6 @@ deploy:
     on:
       branch: master
             
+cache:
+  directories:
+    - node_modules
