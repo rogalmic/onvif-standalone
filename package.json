@@ -1,11 +1,12 @@
 {
   "name": "onvif-standalone",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Onvif standalone viewer based on sample web app",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --windows --linux"
+    "build": "electron-builder --windows --linux",
+    "release": "standard-version"
   },
   "repository": "https://github.com/rogalmic/onvif-standalone.git",
   "keywords": [
@@ -19,11 +20,12 @@
   "author": "Michal Rogalinski",
   "license": "MIT",
   "dependencies": {
-    "node-onvif": "^0.1.4",
-    "request": "^2.85.0"
+    "node-onvif": "^0.1.7",
+    "request": "^2.88.0"
   },
   "devDependencies": {
-    "electron": "^2.0.0",
-    "electron-builder": "^20.11.1"
+    "electron": "^2.0.7",
+    "electron-builder": "^20.28.1",
+    "standard-version": "^4.4.0"
   }
 }
