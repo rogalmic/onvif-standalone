@@ -1,7 +1,8 @@
 language: node_js
+group: dev
 
 node_js:
-- '10.0.0'
+- '12.3.1'
 
 os:
 - linux
@@ -9,18 +10,18 @@ os:
 sudo: required
 dist: xenial
 
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
-      key_url: 'https://dl.winehq.org/wine-builds/Release.key'
-    packages:
-    - winehq-staging
-    - build-essential
-    - gcc-multilib
-    - g++-multilib
-    - libstdc++6
+# addons:
+#   apt:
+#     sources:
+#     - ubuntu-toolchain-r-test
+#     - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
+#       key_url: 'https://dl.winehq.org/wine-builds/Release.key'
+#     packages:
+#     - winehq-staging
+#     - build-essential
+#     - gcc-multilib
+#     - g++-multilib
+#     - libstdc++6
 
 branches:
   only:
@@ -30,7 +31,7 @@ before_install: # redundant, because travis does not use addons for xenial Apr 2
 - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 - wget -nc https://dl.winehq.org/wine-builds/Release.key ; sudo apt-key add Release.key ; sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
 - sudo apt-get update -q
-- sudo apt-get install winehq-staging build-essential libstdc++6 gcc-multilib g++-multilib -y
+- sudo apt-get install winehq-staging build-essential libstdc++6 gcc-multilib g++-multilib -y --allow-unauthenticated
 
 install:
 - npm install -g electron-builder

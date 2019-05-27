@@ -1,4 +1,4 @@
-window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
+window.$ = window.jQuery = require('./jquery-3.4.1.min.js');
 
 var { ipcRenderer, remote, session } = require('electron');
 
@@ -6,7 +6,7 @@ var main = remote.require('./main.js');
 var timerId = -1;
 
 
-$(document).ready(function () {
+$(document).ready(function () {    
 
     // User interface handlers
 
